@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import store from '@/store'
+import nProgress from 'nprogress'
 Vue.use(Router)
 
 /* Layout */
@@ -172,6 +173,27 @@ const createRouter = () => new Router({
 
 const router = createRouter()
 
+// 白名单
+const whitePerson = ['/login', '/404']
+// 路由前置守卫
+router.beforeEach((to, from, next) => {
+  nProgress.start()
+  next()
+  if (store.getters.token) {
+    if (to.path === "/login") {
+      next("/")
+    } else {
+      next()
+    }
+  } else {
+    if (whitePerson.indexOf(to.path) !== -1) {
+      next()
+    } else {
+      next('/login')
+    }
+  }
+  nProgress.done()
+})
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
