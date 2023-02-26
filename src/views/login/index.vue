@@ -154,7 +154,7 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
-  background-image: url("../../assets/common/login.c75bab6d.jpg");
+  background-image: url("../../assets/common/login.jpg");
   .el-input {
     display: inline-block;
     height: 47px;

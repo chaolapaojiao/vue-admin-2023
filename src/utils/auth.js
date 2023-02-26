@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'login_2023_token'
+const TokenKey = 'hrsaas-ihrm-token'
 
 export function getToken() {
   return Cookies.get(TokenKey)
@@ -12,4 +12,13 @@ export function setToken(token) {
 
 export function removeToken() {
   return Cookies.remove(TokenKey)
+}
+
+const TimeKey = 'time-key'
+
+export function getTimeKey() {
+  return Cookies.get(TimeKey)
+}
+export function setTimeKey() {
+  return Cookies.set(TimeKey, Date.now())
 }

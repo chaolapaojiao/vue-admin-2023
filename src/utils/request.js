@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
-
+import router from '@/router'
+import { getTimeKey } from '@/utils/auth'
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -30,7 +30,27 @@ const service = axios.create({
 //   }
 // )
 
-// response interceptor
+const timeOut = 3600
+
+function isTimeOut() {
+  const currentTime = Date.now()
+  const time = getTimeKey()
+  return (currentTime - time) / 1000 > timeOut
+}
+// 请求拦截器
+service.interceptors.request.use(config => {
+  if (store.getters.token) {
+    if (isTimeOut()) {
+      store.dispatch('user/logout')
+      router.push('/login')
+      return new Promise(new Error('登录超时'))
+    }
+    config.headers['Authorization'] = `Bearer ${store.getters.token}`
+  }
+  return config
+}, error => {
+  return Promise.reject(error)
+})
 // 响应拦截器
 service.interceptors.response.use(response => {
   // axios默认加了一层data

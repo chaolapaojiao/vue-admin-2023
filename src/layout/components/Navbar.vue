@@ -12,16 +12,24 @@
     <!-- <breadcrumb class="breadcrumb-container" /> -->
 
     <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
+      <el-dropdown
+        class="avatar-container"
+        trigger="click"
+        @command="handleCommand"
+      >
         <div class="avatar-wrapper">
-          <img src="../../assets//common/head.jpg" class="user-avatar" />
-          <span>管理员</span>
+          <img
+            v-imageerror="defaultImg"
+            :src="userInfo.staffPhoto"
+            class="user-avatar"
+          />
+          <span>{{ userInfo.username }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>首页</el-dropdown-item>
           <el-dropdown-item>项目地址</el-dropdown-item>
-          <el-dropdown-item divided>退出登录</el-dropdown-item>
+          <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -29,19 +37,25 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
 
 export default {
+  data() {
+    return {
+      defaultImg: require("../../assets/common/head.jpg"),
+    };
+  },
   components: {
     Breadcrumb,
     Hamburger,
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar"]),
+    ...mapGetters(["sidebar", "avatar", "userInfo"]),
   },
   methods: {
+    ...mapActions(["user/getUserInfo"]),
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
@@ -49,6 +63,15 @@ export default {
       await this.$store.dispatch("user/logout");
       this.$router.push(`/login?redirect=${this.$route.fullPath}`);
     },
+    handleCommand(command) {
+      if (command === "logout") {
+        this.$store.dispatch("user/logout");
+        this.$router.push("/login");
+      }
+    },
+  },
+  mounted() {
+    this["user/getUserInfo"]();
   },
 };
 </script>
