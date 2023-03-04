@@ -9,7 +9,7 @@
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
-
+import { getDepartment } from '@/api/department'
 /**
  * @param {string} str
  * @returns {Boolean}
