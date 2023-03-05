@@ -7,6 +7,12 @@ export function getRole(params) {
         params
     })
 }
+// 获取公司信息数据
+export function getCompanyInfo(companyId) {
+    return request({
+        url: `/company/${companyId}`
+    })
+}
 // 删除
 export function deleteRole(id) {
     return request({

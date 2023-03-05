@@ -62,7 +62,22 @@
               </el-dialog>
              </div>
              </el-tab-pane>
-          <el-tab-pane label="公司信息" name="info">公司信息</el-tab-pane>
+          <el-tab-pane label="公司信息" name="info" class="info">
+            <el-form ref="companyForm" :model="companyData" label-width="80px" style="margin-top: 50px">
+              <el-form-item label="公司名称">
+                <el-input v-model="companyData.name" placeholder=""></el-input>
+              </el-form-item>
+              <el-form-item label="公司地址">
+                <el-input v-model="companyData.companyAddress" placeholder=""></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱">
+                <el-input v-model="companyData.mailbox" placeholder=""></el-input>
+              </el-form-item>
+              <el-form-item label="备注">
+                <el-input  type="textarea" v-model="companyData.remarks" placeholder="" width="500px"></el-input>
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
         </el-tabs>
       </el-card>
     </div>
@@ -70,16 +85,19 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import {
   getRole,
   deleteRole,
   updateInfo,
   getRoleDetail,
   addRole,
+  getCompanyInfo,
 } from "@/api/setting";
 export default {
   data() {
     return {
+      companyData: {},
       formData: {
         name: "",
         description: "",
@@ -97,6 +115,9 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapGetters(["companyId"]),
+  },
   methods: {
     handleClick() {},
     // 获取角色
@@ -104,7 +125,6 @@ export default {
       try {
         const { data } = await getRole(this.page);
         this.tableData = data.data.rows;
-        console.log(data.data.total);
         this.page.total = data.data.total;
       } catch (error) {
         console.log(error);
@@ -163,9 +183,19 @@ export default {
     handleAdd() {
       this.centerDialogVisible = true;
     },
+    // 获取公司信息
+    async getCompanyInfo() {
+      try {
+        const res = await getCompanyInfo(this.companyId || 1);
+        this.companyData = res.data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   created() {
     this.getRole();
+    this.getCompanyInfo();
   },
 };
 </script>
@@ -178,5 +208,12 @@ export default {
   justify-content: center;
   align-items: center;
   font-size: 14px;
+}
+.info {
+  .el-input,
+  .el-input__inner,
+  .el-textarea__inner {
+    width: 500px;
+  }
 }
 </style>
