@@ -8,7 +8,9 @@
         <div class="btns">
           <el-button type="primary" size="small">导入</el-button>
           <el-button type="danger" size="small">导出</el-button>
-          <el-button type="success" size="small">新增员工</el-button>
+          <el-button type="success" size="small" @click="handleAdd"
+            >新增员工</el-button
+          >
         </div>
       </el-card>
       <el-table :data="tableData" border style="width: 100%">
@@ -69,15 +71,23 @@
         @current-change="handleCurrentChange"
       >
       </el-pagination>
+      <add-employee
+        :show-dialog.sync="show"
+        @addEmployee="addEmployee"
+        @cancleAdd="show = false"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import addEmployee from "@/views/employees/compoents/add-employee";
 import { getEmployees, deleteEmployees } from "@/api/employees";
 export default {
+  components: { addEmployee },
   data() {
     return {
+      show: false,
       tableData: [],
       pageData: {
         page: 1,
@@ -116,6 +126,15 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    // 新增员工
+    handleAdd() {
+      this.show = true;
+    },
+    // 成功增加
+    addEmployee() {
+      this.show = false;
+      this.getEmployeeData();
     },
   },
   created() {
