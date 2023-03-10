@@ -1,6 +1,11 @@
 <template>
   <div class="employees-container">
     <div class="app-container">
+      <assign-role
+        :showRoleDialog="showRoleDialog"
+        :userId="id"
+        @handleClose="showRoleDialog = false"
+      />
       <el-card class="header">
         <el-button type="info" disabled
           >共有{{ this.pageData.total }}条数据</el-button
@@ -60,7 +65,9 @@
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
-            <el-button type="text" size="small">角色</el-button>
+            <el-button type="text" size="small" @click="handleRole(row)"
+              >角色</el-button
+            >
             <el-button type="text" size="small" @click="handleDelete(row)"
               >删除</el-button
             >
@@ -86,12 +93,15 @@
 </template>
 
 <script>
+import assignRole from "@/views/employees/compoents/assign-role";
 import addEmployee from "@/views/employees/compoents/add-employee";
 import { getEmployees, deleteEmployees } from "@/api/employees";
 export default {
-  components: { addEmployee },
+  components: { addEmployee, assignRole },
   data() {
     return {
+      showRoleDialog: false,
+      id: "",
       show: false,
       tableData: [],
       pageData: {
@@ -140,6 +150,11 @@ export default {
     addEmployee() {
       this.show = false;
       this.getEmployeeData();
+    },
+    // 角色管理
+    handleRole(row) {
+      this.showRoleDialog = true;
+      this.id = row.id;
     },
   },
   created() {
