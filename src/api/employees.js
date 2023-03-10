@@ -24,3 +24,49 @@ export function addEmployees(data) {
         data
     })
 }
+
+// 获取员工基本信息
+export function getBaseInfo(id) {
+    return request({
+        url: `/sys/user/${id}`
+    })
+}
+// 更新员工信息
+export function updateUserInfo(data) {
+    return request({
+        url: `/sys/user/${data.id}`,
+        method: 'put',
+        data
+    })
+}
+
+// 获取用户的详细信息
+export function getUserDetailInfo(id) {
+    return request({
+        url: `/employees/${id}/personalInfo`
+    })
+}
+
+// 修改用户详细信息
+export function updatePersonal(data) {
+    return request({
+        url: `/employees/${data.userId}/personalInfo`,
+        method: 'put',
+        data
+    })
+}
+
+// 获取岗位信息
+export function getJobInfo(id) {
+    return request({
+        url: `/employees/${id}/jobs`
+    })
+}
+// 更新岗位信息
+export function updateJob(data) {
+    return request({
+        url: `/employees/${data.userId}/jobs`,
+        method: 'put',
+        data
+    })
+}

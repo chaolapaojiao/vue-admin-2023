@@ -28,4 +28,11 @@ export function logout() {
     method: 'post'
   })
 }
+// 更新员工基本信息
+export function updateuserInfo(id) {
+  return request({
+    url: `/sys/user/${id}`,
+    method: 'put'
+  })
+}
 
