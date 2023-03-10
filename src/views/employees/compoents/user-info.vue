@@ -28,8 +28,8 @@
           <el-option label="非正式" value="0"> </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="用户照片" style="width: 300px"> </el-form-item>
-      <br />
+      <el-form-item label="用户照片" style="width: 300px"> <upload-img /></el-form-item>
+      <br>
       <el-form-item label="">
         <el-button type="primary" size="small" @click="updateUserInfo">保存更新</el-button></el-button>
         <el-button size="small">返回</el-button>
@@ -52,7 +52,6 @@
         <!-- 员工照片 -->
 
         <el-form-item label="员工照片">
-          <!-- 放置上传图片 -->
         </el-form-item>
         <el-form-item label="国家/地区">
           <el-select v-model="formData.nationalArea" class="inputW2">
@@ -245,10 +244,12 @@
 </template>
 
 <script>
+import uploadImg from "@/views/employees/compoents/upload-img";
 import { getUserDetailInfo, updatePersonal } from "@/api/employees";
 import { getUserDetail, updateuserInfo } from "@/api/user";
 import EmployeeEnum from "@/api/constant/employees";
 export default {
+  components: { uploadImg },
   data() {
     return {
       userId: this.$route.params.id,
